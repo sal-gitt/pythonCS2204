@@ -19,7 +19,7 @@ class stack:
     def pop(self):
         if(self.size == 0):
             print("Empty book stack")
-            return 1
+            return None
         temp = self.head
         self.head = self.head.next
         book = temp.value
@@ -29,11 +29,13 @@ class stack:
     def peek(self):
         if(self.size == 0):
             print("Empty book stack")
+            return None
         return self.head.value
 
     def Print(self):
         if(self.size == 0):
             print("Empty book stack")
+            return None
         temp = self.head
         for i in range (self.size):
             print(temp.value)

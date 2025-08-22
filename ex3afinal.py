@@ -9,19 +9,16 @@ class stack:
     def pop(self):
         if len(self.stack) == 0:
             print("Empty Book Stack")
-            return 1
         return self.stack.pop()
 
     def peek(self):
         if len(self.stack) == 0:
             print("Empty Book Stack")
-            return 1
         return self.stack[-1]
 
     def display(self):
         if len(self.stack) == 0:
             print("Empty Book Stack")
-            return 1
         for book in reversed(self.stack):
             print(f"- {book}")
 

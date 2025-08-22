@@ -23,7 +23,7 @@ class stack:
             print("Empty Book Stack")
             return None
         for book in reversed(self.stack):
-            print(f"- {book}")
+            print(f"{book}")
 
 
 Library_1 = stack()

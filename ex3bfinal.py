@@ -37,7 +37,7 @@ class stack:
             print("Empty book stack")
             return None
         temp = self.head
-        for i in range (self.size):
+        for i in range (self.size - 1):
             print(temp.value)
             temp = temp.next
             

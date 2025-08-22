@@ -13,6 +13,7 @@ class stack:
         t.value = value
         t.next = self.head
         self.head = t
+        self.size += 1
         return True
 
     def pop(self):
@@ -28,13 +29,11 @@ class stack:
     def peek(self):
         if(self.size == 0):
             print("Empty book stack")
-            return 1
         return self.head.value
 
     def Print(self):
         if(self.size == 0):
             print("Empty book stack")
-            return 1
         temp = self.head
         for i in range (self.size):
             print(temp.value)

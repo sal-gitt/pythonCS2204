@@ -32,7 +32,7 @@ class stack:
             return None
         return self.head.value
 
-    def Print(self):
+    def display(self):
         if(self.size == 0):
             print("Empty book stack")
             return None

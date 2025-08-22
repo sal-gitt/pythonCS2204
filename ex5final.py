@@ -104,6 +104,6 @@ for i in range (limit):
 polyn_add(buffer, limit)
 
 temp = buffer[limit - 1]
-for i in range (buffer[limit - 1].size):
+for i in range (buffer[limit - 1].size - 1):
     print (f"{temp.coeff}x^{temp.exp}")
     temp = temp.next

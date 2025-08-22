@@ -6,104 +6,81 @@ class node:
 
 class SLL:
     def __init__(self):
-        self.head = node()
+        self.head = None
         self.size = 0
 
-    def InsertAt(self, coeff, exp, pos = None):
+    def InsertAt(self, coeff, exp):
         t = node()
         t.coeff = coeff
         t.exp = exp
 
-        if (pos == None):
-            pos = self.size
-
-        if (pos == 0):
+        if self.head is None or self.head.exp < exp:
             t.next = self.head
             self.head = t
-            self.size += 1
-            return True
-
-        elif (pos <= self.size):
+        else:
             temp = self.head
-            for i in range (pos - 1):
+            while temp.next is not None and temp.next.exp >= exp:
                 temp = temp.next
             t.next = temp.next
             temp.next = t
-            self.size += 1
-            return True
+        self.size += 1
 
-def polyn_add(buffer, limit):
-    for i in range (limit - 1):
-        max_value = max(buffer[i].size, buffer[i+1].size)
-        if (buffer[i].size == max_value):
-            temp = buffer[i]
-            buffer[i] = buffer[i+1]
-            buffer[i+1] = temp
-        else:
-            temp = buffer[i+1]
-            buffer[i+1] = buffer[i]
-            buffer[i] = temp
+def polyn_add(buffer):
+    for i in range(len(buffer) - 1):
+        p1 = buffer[i]
+        p2 = buffer[i + 1]
 
-        temp1 = buffer[i]
-        temp2 = buffer[i+1]    
-        for i in range (max_value):
-            if (temp1.next is not None):
-                if (temp1.exp > temp2.exp):
-                    temp2.InsertAt(temp2.coeff, temp2.exp, i)
-                elif (temp2.exp > temp1.exp):
-                    pos = 0
-                    while (temp2.next is not None and temp2.exp > temp1.exp):
-                        temp2 = temp2.next
-                        pos += 1
-                    if (temp2.exp == temp1.exp):
-                        temp2.coeff += temp1.coeff
-                    else:
-                        temp2.InsertAt(temp2.coeff, temp2.exp, pos)
-                else:
-                    temp2.coeff += temp1.coeff
-                temp1 = temp1.next
-                temp2 = temp2.next
-        
-limit = int(input("Enter no. of expressions: "))
+        t1 = p1.head
+        while t1:
+            t2 = p2.head
+            found = False
+            while t2:
+                if t2.exp == t1.exp:
+                    t2.coeff += t1.coeff
+                    found = True
+                    break
+                t2 = t2.next
+            if not found:
+                p2.InsertAt(t1.coeff, t1.exp)
+            t1 = t1.next
+
+
+limit = int(input("Enter number of expressions: "))
 buffer = []
-coefficients = []
-exponents = []
-operators = ['+', '-']
-for i in range (limit):
-    buffer.append(SLL())
-    eqn = input("Enter expression: ")
-    flag = 0
-    for char in eqn:
-        if (char.isalpha()):
-            flag = 1
-            continue
-        if (flag != 1):
-            coefficients.append(char)
-        elif (flag == 1):
-            if(char == '^'):
-                continue
-            if (char.isdigit()):
-                exponents.append(char)
-        if (char in operators):
-            if (char == '-'):
-                sign = 1
-            if (eqn.index(char) != 0):
-                if (sign == 1):
-                    coeff = -(int("".join(coefficients)))
-                else:
-                    coeff = int("".join(coefficients))
-                if not exponents:
-                    exp = 0
-                else:
-                    exp = int("".join(exponents))
-                coefficients.clear()
-                exponents.clear()
-                buffer[i].InsertAt(coeff, exp)
-            else:
-                continue
-polyn_add(buffer, limit)
 
-temp = buffer[limit - 1]
-for i in range (buffer[limit - 1].size - 1):
-    print (f"{temp.coeff}x^{temp.exp}")
-    temp = temp.next
+for i in range(limit):
+    buffer.append(SLL())
+    eqn = input(f"Enter expression {i+1}: ")
+    eqn = eqn.replace(" ", "").replace("-", "+-")
+    terms = eqn.split("+")
+    for term in terms:
+        if not term:
+            continue
+        if "x" in term:
+            parts = term.split("x")
+            coeff = parts[0]
+            coeff = int(coeff) if coeff not in ("", "+", "-") else int(coeff + "1")
+            exp = int(parts[1][1:]) if "^" in term else 1
+        else:
+            coeff = int(term)
+            exp = 0
+        buffer[i].InsertAt(coeff, exp)
+
+polyn_add(buffer)
+
+print("\nResultant Polynomial:")
+temp = buffer[-1].head
+if temp is None:
+    print("0")
+else:
+    terms = []
+    while temp:
+        if temp.coeff != 0:
+            if temp.exp == 0:
+                terms.append(f"{temp.coeff}")
+            elif temp.exp == 1:
+                terms.append(f"{temp.coeff}x")
+            else:
+                terms.append(f"{temp.coeff}x^{temp.exp}")
+        temp = temp.next
+    print(" + ".join(terms).replace("+ -", "- "))

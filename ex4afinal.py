@@ -7,10 +7,10 @@ class queue:
         self.size = 0
         
     def enqueue(self, car):
-        if self.size == capacity:
+        if self.size == self.capacity:
             print("Car parking is full")
             return None
-        self.rear = self.rear + 1
+        self.rear = (self.rear + 1) % self.capacity
         self.queue[self.rear] = car
         self.size += 1
         return True
@@ -21,9 +21,9 @@ class queue:
             return None
         car = self.queue[self.front]
         self.queue[self.front] = None
-        self.front = self.front + 1
+        self.front += 1
         self.size -= 1
-        return True
+        return car
 
     def display(self):
         if self.size == 0:
@@ -41,31 +41,28 @@ while True:
 
     match opt:
         case 1:
-            size = input("Enter parking size: ")
-            Parking_1.capcacity = size
+            size = int(input("Enter parking size: "))
+            Parking_1.capacity = size
+            Parking_1.queue = [None] * Parking_1.capacity
 
         case 2:
             limit = int(input("Enter no. of cars: "))
             if (limit > Parking_1.capacity):
                 print("Parking capacity exceeded, please try with a lower car count")
-            for i in range (0, limit):
-                song = input("Enter car name: ")
-                flag = Parking_1.enqueue(song)
+                continue
+            for _ in range (limit):
+                car = input("Enter car name: ")
+                flag = Parking_1.enqueue(car)
                 if (flag):
                     print("Car parked successfully")
 
         case 3:
-            pos = int(input("Enter position: "))
-            Playlist_1.DeleteAt(pos - 1)
+             print(Parking_1.dequeue())
 
         case 4:
-            pos = int(input("Enter position: "))
-            Playlist_1.PrintAt(pos - 1)
+            Parking_1.display()
 
         case 5:
-            Playlist_1.Print()
-
-        case 6:
             break
            
         case _:

@@ -20,7 +20,7 @@ class queue:
         
     def dequeue(self):
         if self.front == None:
-            print("Car parking is full")
+            print("Car parking is empty")
             return None
         temp = self.front.value
         self.front.value = None
@@ -31,7 +31,7 @@ class queue:
      
     def peek(self):
         if self.front == None:
-            print ("Car parking is full")
+            print ("Car parking is empty")
             return None
         return self.front.value
   

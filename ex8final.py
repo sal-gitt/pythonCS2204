@@ -56,14 +56,7 @@ class BST:
         for i in range(len(self.tree)):
             if self.tree[i] and self.get_hour(self.tree[i]["TimeStamp"]) == hour:
                 self.tree[i] = None
-
-    def visualize_preorder(self, index=0):
-        if index >= len(self.tree) or self.tree[index] is None:
-            return
-        print(self.tree[index]["Visitor"], end=", ")
-        self.visualize_preorder(2 * index + 1)
-        self.visualize_preorder(2 * index + 2)
-
+    
     def visualize_inorder(self, index=0):
         if index >= len(self.tree) or self.tree[index] is None:
             return
@@ -80,54 +73,43 @@ class BST:
 
 bst = BST()
 while True:
-print("\n--- Visitor BST Menu ---")
-        print("1. Add new visitor")
-        print("2. Search by name")
-        print("3. Search by hour")
-        print("4. Delete by name")
-        print("5. Delete by hour")
-        print("6. Display tree (Pre-order)")
-        print("7. Display tree (In-order)")
-        print("8. Display tree (Post-order)")
-        print("9. Exit")
-
-        choice = input("Enter your choice (1-9): ")
-
-        match choice:
-            case "1":
-                name = input("Enter visitor name: ")
-                bst.insert(name)
-                print(f"Visitor '{name}' added.")
-            case "2":
-                name = input("Enter name to search: ")
-                result = bst.search_by_name(name)
-                print("Search result:", result if result else "No match found.")
-            case "3":
-                hour = int(input("Enter hour to search: "))
-                result = bst.search_by_timeframe(hour)
-                print("Search result:", result if result else "No match found.")
-            case "4":
-                name = input("Enter name to delete: ")
-                bst.delete_by_name(name)
-                print(f"Visitor '{name}' deleted.")
-            case "5":
-                hour = int(input("Enter hour to delete visitors: "))
-                bst.delete_by_timeframe(hour)
-                print(f"Visitors in hour {hour} deleted.")
-            case "6":
-                print("Pre-order traversal:")
-                bst.visualize_preorder()
-                print()
-            case "7":
-                print("In-order traversal:")
-                bst.visualize_inorder()
-                print()
-            case "8":
-                print("Post-order traversal:")
-                bst.visualize_postorder()
-                print()
-            case "9":
-                print("Exiting program.")
-                break
-            case _:
-                print("Invalid choice. Please enter a number between 1 and 9.")
+    print("1.Add new visitor")
+    print("2.Search by name")
+    print("3.Search by hour")
+    print("4.Delete by name")
+    print("5.Delete by hour")
+    print("6.Display entries in sorted order")
+    print("7.Display entries by recent-first")
+    print("8.Exit")
+    opt = input("Choose an option (1-8): ")
+    match opt:
+        case "1":
+            name = input("Enter visitor name: ")
+            bst.insert(name)
+            print(f"Visitor '{name}' added.")
+        case "2":
+            name = input("Enter name to search: ")
+            result = bst.search_by_name(name)
+            print("Search result:", result if result else "No match found.")
+        case "3":
+            hour = int(input("Enter hour to search: "))
+            result = bst.search_by_timeframe(hour)
+            print("Search result:", result if result else "No match found.")
+        case "4":
+            name = input("Enter name to delete: ")
+            bst.delete_by_name(name)
+            print(f"Visitor '{name}' deleted.")
+        case "5":
+            hour = int(input("Enter hour to delete visitors: "))
+            bst.delete_by_timeframe(hour)
+            print(f"Visitors in hour {hour} deleted.")
+        case "6":
+            bst.visualize_inorder()
+            print()
+        case "7":
+            bst.visualize_postorder()
+            print()
+        case "8":
+            break
+        case _:
+            print("Invalid choice. Please enter a number between 1 and 9.")

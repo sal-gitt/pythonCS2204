@@ -1,18 +1,8 @@
-
 import time
 
 class BST:
     def __init__(self):
         self.tree = []
-
-    def get_left_index(self, index):
-        return 2 * index + 1
-
-    def get_right_index(self, index):
-        return 2 * index + 2
-
-    def get_parent_index(self, index):
-        return (index - 1) // 2 if index != 0 else None
 
     def get_hour(self, timestamp):
         return int(timestamp // 3600)
@@ -31,7 +21,7 @@ class BST:
             new_hour = self.get_hour(timestamp)
 
             if new_hour < current_hour or (new_hour == current_hour and visitor_name < current["Visitor"]):
-                left_index = self.get_left_index(index)
+                left_index = 2 * index + 1
                 if left_index >= len(self.tree):
                     self._expand_tree(left_index)
                 if self.tree[left_index] is None:
@@ -39,7 +29,7 @@ class BST:
                     return
                 index = left_index
             else:
-                right_index = self.get_right_index(index)
+                right_index = 2 * index + 2
                 if right_index >= len(self.tree):
                     self._expand_tree(right_index)
                 if self.tree[right_index] is None:
@@ -67,38 +57,77 @@ class BST:
             if self.tree[i] and self.get_hour(self.tree[i]["TimeStamp"]) == hour:
                 self.tree[i] = None
 
-    def visualize(self):
-        for i, node in enumerate(self.tree):
-            if node is None:
-                continue
-            parent = self.tree[self.get_parent_index(i)]["Visitor"] if self.get_parent_index(i) is not None and self.tree[self.get_parent_index(i)] else None
-            left_index = self.get_left_index(i)
-            right_index = self.get_right_index(i)
-            left = self.tree[left_index]["Visitor"] if left_index < len(self.tree) and self.tree[left_index] else None
-            right = self.tree[right_index]["Visitor"] if right_index < len(self.tree) and self.tree[right_index] else None
-            print(f"Node '{node['Visitor']}' at index {i}: parent - {parent}, left child - {left}, right child - {right}")
+    def visualize_preorder(self, index=0):
+        if index >= len(self.tree) or self.tree[index] is None:
+            return
+        print(self.tree[index]["Visitor"], end=", ")
+        self.visualize_preorder(2 * index + 1)
+        self.visualize_preorder(2 * index + 2)
 
-# Example usage
-if __name__ == "__main__":
-    bst = BST()
-    visitors = ["Alice", "Bob", "Charlie", "David", "Eve", "Frank", "Grace"]
-    for name in visitors:
-        bst.insert(name)
+    def visualize_inorder(self, index=0):
+        if index >= len(self.tree) or self.tree[index] is None:
+            return
+        self.visualize_inorder(2 * index + 1)
+        print(self.tree[index]["Visitor"], end=", ")
+        self.visualize_inorder(2 * index + 2)
 
-    print("\nTree Visualization:")
-    bst.visualize()
+    def visualize_postorder(self, index=0):
+        if index >= len(self.tree) or self.tree[index] is None:
+            return
+        self.visualize_postorder(2 * index + 1)
+        self.visualize_postorder(2 * index + 2)
+        print(self.tree[index]["Visitor"], end=", ")
 
-    print("\nSearch by name 'Alice':")
-    print(bst.search_by_name("Alice"))
+bst = BST()
+while True:
+print("\n--- Visitor BST Menu ---")
+        print("1. Add new visitor")
+        print("2. Search by name")
+        print("3. Search by hour")
+        print("4. Delete by name")
+        print("5. Delete by hour")
+        print("6. Display tree (Pre-order)")
+        print("7. Display tree (In-order)")
+        print("8. Display tree (Post-order)")
+        print("9. Exit")
 
-    current_hour = int(time.time() // 3600)
-    print(f"\nSearch by current hour ({current_hour}):")
-    print(bst.search_by_timeframe(current_hour))
+        choice = input("Enter your choice (1-9): ")
 
-    print("\nDeleting visitor 'Bob'")
-    bst.delete_by_name("Bob")
-    bst.visualize()
-
-    print(f"\nDeleting all visitors in hour {current_hour}")
-    bst.delete_by_timeframe(current_hour)
-    bst.visualize()
+        match choice:
+            case "1":
+                name = input("Enter visitor name: ")
+                bst.insert(name)
+                print(f"Visitor '{name}' added.")
+            case "2":
+                name = input("Enter name to search: ")
+                result = bst.search_by_name(name)
+                print("Search result:", result if result else "No match found.")
+            case "3":
+                hour = int(input("Enter hour to search: "))
+                result = bst.search_by_timeframe(hour)
+                print("Search result:", result if result else "No match found.")
+            case "4":
+                name = input("Enter name to delete: ")
+                bst.delete_by_name(name)
+                print(f"Visitor '{name}' deleted.")
+            case "5":
+                hour = int(input("Enter hour to delete visitors: "))
+                bst.delete_by_timeframe(hour)
+                print(f"Visitors in hour {hour} deleted.")
+            case "6":
+                print("Pre-order traversal:")
+                bst.visualize_preorder()
+                print()
+            case "7":
+                print("In-order traversal:")
+                bst.visualize_inorder()
+                print()
+            case "8":
+                print("Post-order traversal:")
+                bst.visualize_postorder()
+                print()
+            case "9":
+                print("Exiting program.")
+                break
+            case _:
+                print("Invalid choice. Please enter a number between 1 and 9.")

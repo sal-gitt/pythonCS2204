@@ -1,7 +1,7 @@
 from datetime import datetime
 from collections import defaultdict
 
-class LogEntry:
+class Entry:
     def __init__(self, name: str, entry_time: str, purpose: str):
         self.name = name
         self.entry_time = datetime.strptime(entry_time, '%Y-%m-%d %H:%M:%S')
@@ -10,13 +10,13 @@ class LogEntry:
     def __str__(self):
         return f"Name: {self.name}, Time: {self.entry_time}, Purpose: {self.purpose}"
 
-class BSTNode:
+class Node:
     def __init__(self, entry: LogEntry):
         self.entry = entry
         self.left = None
         self.right = None
 
-class LogBookBST:
+class BST:
     def __init__(self, sort_by='name'):
         if sort_by not in ('name', 'time', 'purpose'):
             raise ValueError("Sort_by must be 'name', 'time', or 'purpose'")
